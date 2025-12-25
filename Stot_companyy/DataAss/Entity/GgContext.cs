@@ -6,6 +6,7 @@ namespace Stot_company.DataAss.Entity
     {
         public GgContext(DbContextOptions options) : base(options)
         {
+           // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         public virtual DbSet<Client> Clients { get; set; } = null!;

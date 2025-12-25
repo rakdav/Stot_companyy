@@ -21,7 +21,7 @@ namespace Stot_company.DataAss.Data
                         Passport = new Random().Next(100000, 999999),
                         Payment = new Random().Next(10, 10000),
                         ArrearsClient = DateTime.Now,
-                        Sex = Lorem.Sentence()
+                        Sex = (new Random().Next(0,2))==1?"Male":"Female"
                     };
                     stotcomp.Clients.Add(dep);
                     stotcomp.SaveChanges();
