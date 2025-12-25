@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stot_companyy", "Stot_companyy\Stot_companyy.csproj", "{77ED5F56-9DC7-4CDA-B159-A46618DC698D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazzer", "Blazzer\Blazzer.csproj", "{F60D2626-865B-45EA-864D-C2C7F4BB979A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77ED5F56-9DC7-4CDA-B159-A46618DC698D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77ED5F56-9DC7-4CDA-B159-A46618DC698D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77ED5F56-9DC7-4CDA-B159-A46618DC698D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77ED5F56-9DC7-4CDA-B159-A46618DC698D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F60D2626-865B-45EA-864D-C2C7F4BB979A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60D2626-865B-45EA-864D-C2C7F4BB979A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60D2626-865B-45EA-864D-C2C7F4BB979A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60D2626-865B-45EA-864D-C2C7F4BB979A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BCB8137E-EDBC-453C-A03A-FF50C8FC7A83}
+	EndGlobalSection
+EndGlobal

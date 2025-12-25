@@ -1,0 +1,73 @@
+﻿@page "/WorkerView"
+
+@using BlazorBootstrap
+@using Blazzer.DataAccess
+@using Stot_company.DataAss
+@using Stot_company.DataAss.Entity
+@using System.ComponentModel.DataAnnotations
+@using System.Drawing
+
+@inject NavigationManager NavigationManager
+<h3>WorkerView</h3>
+@if(AllWorkers.Count == 0)
+{
+    <p><em>Загрузка...</em></p>
+}
+else
+{
+    <Grid TItem="Worker"
+          Class="table table-hover table-bordered table-striped"
+          DataProvider="WorkerDataProvider"
+          AllowPaging="true"
+          AllowFiltering="true"
+          AllowSorting="true"
+          AutoHidePaging="true"
+          PageSize="10"
+          PageSizeSelectorVisible="true"
+          PageSizeSelectorItems="@(new int[] { 5,10,20 })"
+          Responsive="true">
+          <GridColumns>
+            <GridColumn TItem="Worker" HeaderText="Имя работника" PropertyName="name_Worker" SortKeySelector="item => item.NameWorker">
+                @context.NameWorker
+              </GridColumn>
+            <GridColumn TItem="Worker" HeaderText="Фамилия работника" PropertyName="last_Name_Worker" SortKeySelector="item => item.LastNameWorker">
+                @context.LastNameWorker
+            </GridColumn>
+            <GridColumn TItem="Worker" HeaderText="Должность" PropertyName="post" SortKeySelector="item => item.Post">
+                @context.Post
+            </GridColumn>
+            <GridColumn TItem="Worker" HeaderText="Id Работника" PropertyName="idWorker" SortKeySelector="item => item.IdWorker">
+                @context.Post
+            </GridColumn>
+            <GridColumn TItem="Worker" HeaderText="Id Компании" PropertyName="idComp" SortKeySelector="item => item.IdComp">
+                @context.Post
+            </GridColumn>
+          </GridColumns>
+    </Grid>
+    <a href="/CreateWorker" class="btn btn-primary"> Создать </a>
+}
+@code {
+ 
+    
+    private List<Worker> AllWorkers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            
+            string completeQuery = "query{allWorker{nameWorker,lastNameWorker,post,idWorker,idComp}}";
+            string qraphQLQueryType = "allWorker";
+            var result = await Query.ExceuteQueryReturnListAsyn<Worker>(qraphQLQueryType, completeQuery);
+            AllWorkers = result;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+    private async Task<GridDataProviderResult<Worker>> WorkerDataProvider(GridDataProviderRequest<Worker> request)
+    {
+        return await Task.FromResult(request.ApplyTo(AllWorkers));
+    }
+}

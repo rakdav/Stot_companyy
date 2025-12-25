@@ -1,0 +1,76 @@
+﻿@page "/CreateWorker"
+
+@using BlazorBootstrap
+@using Blazzer.DataAccess
+@using Blazzer.DataAccess.Entity
+
+@inject NavigationManager NavigationManager
+<h3>CreateWorker</h3>
+<div class="row">
+    <EditForm Model="@createWorker" OnValidSubmit="@CreateButtonClick">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            Имя:<InputText id="name" @bind-Value="createWorker.NameWorker"
+                           class="form-control" />
+        </div>
+        <div class="form-group">
+            Email:<InputText id="email" @bind-Value="createWorker.LastNameWorker"
+                             class="form-control" />
+        </div>
+        <div class="form-group">
+            Возраст:<InputNumber id="age" @bind-Value="createWorker.Post"
+                                 class="form-control" />
+        </div>
+        <div class="form-group">
+            Подразделение:<InputSelect TValue="int" @bind-Value="createWorker.IdWorker"
+                                       class="form-control">
+                @foreach (var dept in compList!)
+                {
+                    <option value="@dept.IdComp">@dept.Name</option>
+                }
+            </InputSelect>
+        </div>
+        <button type="submit" class="btn btn-success">Создать</button>
+    </EditForm>
+</div>
+<a href="/EmployeeView"><i class="bi bi-backspace"></i></a>
+@code {
+    private CreateWorkerReturnModel createWorkerReturnModel =
+    new CreateWorkerReturnModel();
+    private CreateWorkerModel createWorker =
+    new CreateWorkerModel();
+    private IEnumerable<CompReturnModel>? compList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        compList = await GetDepartments();
+    }
+    private async Task CreateButtonClick()
+    {
+        try
+        {
+            string query = "mutation{createWithDepartmentId(age:" + createWorker.NameWorker + ",mail: \"" + createWorker.LastNameWorker +  "\",depId:" + createWorker.IdWorker + "){name,workerId,compId}}";
+            string graphQLQueryType = "createWithDepartmentId";
+            var result = await Mutation.ExceuteMutationAsyn<CreateWorkerReturnModel>(graphQLQueryType, query);
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private async Task<IEnumerable<CompReturnModel>> GetDepartments()
+    {
+        try
+        {
+            string query = "query{allCompOnly{CompId,name}}";
+            string graphQLQueryType = "allDepartmentOnly";
+            return await Query.ExceuteQueryReturnListAsyn<CompReturnModel>(graphQLQueryType, query);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+}
+}

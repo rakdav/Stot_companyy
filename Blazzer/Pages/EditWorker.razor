@@ -1,0 +1,78 @@
+﻿@page "/EditWorker/{Id:int}"
+@using Blazzer.DataAccess
+@using Stot_company.DataAss.Entity
+@using Blazzer.DataAccess.Entity
+
+
+@inject NavigationManager NavigationManager
+<h3>EditWorker</h3>
+<EditForm Model="@worker" OnInvalidSubmit="@EditButtonClick">
+    <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            Имя:<InputText id="name" @bind-Value="worker.NameWorker"
+            class="form-control"
+            />
+        </div>
+    <div class="form-group">
+        Фамилия:<InputText id="last_name" @bind-Value="worker.LastNameWorker"
+                       class="form-control" />
+    </div>
+    <div class="form-group">
+        Должность:<InputText id="post" @bind-Value="worker.Post"
+                       class="form-control" />
+    </div>
+    @foreach (var compt in compList!)
+    {
+        <option value="@compt.IdComp"> @compt.Name</option>
+    }
+    <button type="submit" class="btn btn-success"> Сохранить </button>
+    <a href="/WorkerView"> Назад </a>
+</EditForm>
+@code {
+
+    [Parameter]
+    public int? Id { get; set; }
+    private Worker worker = new Worker();
+    private IEnumerable<CompReturnModel>? compList;
+    protected override async Task OnInitializedAsync()
+    {
+        compList = await GetDepartments();
+        string completeQuery = "query{employerById(id:" + Id + "){employeeId,name,email,age,department{name,departmentId}}}";
+        string qraphQLQueryType = "employerById";
+        var result = await Query.ExceuteQueryAsyn<Worker>(qraphQLQueryType, completeQuery);
+        if (result == null)
+        {
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        worker = result!;
+       
+    }
+    private async Task EditButtonClick()
+    {
+        try
+        {
+            string query = "mutation{editEmployee(age:" + worker.NameWorker + ",depId:" + worker.IdWorker + ",employeeId:" + worker.LastNameWorker + ",mail:\"" + worker.Post + "\",name:\"";
+            string graphQLQueryType = "editEmployee";
+            var result = await Mutation.ExceuteMutationAsyn<CreateWorkerReturnModel>(graphQLQueryType, query);
+            NavigationManager.NavigateTo($"EmployeeView");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private async Task<IEnumerable<CompReturnModel>> GetDepartments()
+    {
+        try
+        {
+            string query = "query{allDepartmentOnly{departmentId,name}}";
+            string graphQLQueryType = "allDepartmentOnly";
+            return await Query.ExceuteQueryReturnListAsyn<CompReturnModel>(graphQLQueryType, query);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+}

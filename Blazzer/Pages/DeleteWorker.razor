@@ -1,0 +1,70 @@
+﻿@page "/DeleteWorker/{Id:int}"
+
+
+@using Blazzer.DataAccess
+@using Blazzer.DataAccess.Entity
+@using Stot_company.DataAss
+@using Stot_company.DataAss.Entity
+
+@inject NavigationManager NavigationManager
+<h3>DeleteWorker</h3>
+
+@if(worker.NameWorker == null)
+{
+    <p><em>Загрузка</em></p>
+}
+else
+{
+    <h2>@worker.NameWorker</h2>
+
+    <div>
+        <div>
+            Фамилия:<span style="font-size:large">@worker.LastNameWorker </span>
+            <br/>
+        </div>
+        <div>
+            Должность:<span style="font-size:large">@worker.Post </span>
+            <br />
+        </div>
+        <div>
+            <button class="btn btn-primary" @onclick="Delete"> Да</button>
+            <button class="btn btn-secondary" @onclick="Back">Нет</button>
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    private Worker worker = new Worker();
+    protected override async Task OnInitializedAsync()
+    {
+        string completeQuery = "query{workerById}(id:" + Id +"){workerId,name,lastname,post,compony{name,compId}}}";
+        string qraphQLQueryType = "workerById";
+        var result = await Query.ExceuteQueryAsyn<Worker>(qraphQLQueryType, completeQuery);
+        if(result == null)
+        {
+            NavigationManager.NavigateTo($"WorkerView");
+        }
+        worker = result!;
+        
+    }
+
+    private void Back()
+    {
+        NavigationManager.NavigateTo($"WorkerView");
+    }
+    private async Task Delete()
+    {
+        try
+        {
+            string query = "mutation{deleteWorker(id:" + Id + "){name}}";
+            string graphQLQueryType = "deleteWorker";
+            await Mutation.ExceuteMutationAsyn<CreateWorkerReturnModel>(graphQLQueryType, query);
+            NavigationManager.NavigateTo($"WorkerView");
+        }
+        catch(Exception)
+        {
+            throw;
+        }
+    }
+}
